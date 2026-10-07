@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>草编椅子 · 日记与倾诉</title>
+  <link rel="stylesheet" href="style.css?v=3" />
+</head>
+<body>
+  <header>
+    <h1>🌷 草编椅子</h1>
+    <div id="syncStatus" class="badge"></div>
+  </header>
+
+  <nav class="tabs">
+    <button id="tabDiary" class="tab active" onclick="switchTab('diary')">📔 写日记</button>
+    <button id="tabChat" class="tab" onclick="switchTab('chat')">💬 发消息</button>
+  </nav>
+
+  <!-- 日记页 -->
+  <main id="pageDiary" class="page">
+    <section class="card">
+      <h2>记录今天</h2>
+      <div class="row">
+        <label>心情：
+          <select id="moodSelect">
+            <option value="😊 开心">😊 开心</option>
+            <option value="🙂 还行">🙂 还行</option>
+            <option value="😔 难过">😔 难过</option>
+            <option value="😫 累了">😫 累了</option>
+            <option value="😡 生气">😡 生气</option>
+            <option value="😰 焦虑">😰 焦虑</option>
+          </select>
+        </label>
+        <label>日期：<input type="date" id="diaryDate" /></label>
+      </div>
+      <textarea id="diaryContent" placeholder="今天发生了什么？随便写写吧，没有人会打扰你..." rows="6"></textarea>
+      <button class="primary" onclick="saveDiary()">保存日记</button>
+    </section>
+
+    <section class="card">
+      <h2>往期日记</h2>
+      <div id="diaryList" class="list"></div>
+    </section>
+  </main>
+
+  <!-- 聊天页 -->
+  <main id="pageChat" class="page hidden">
+    <section class="card chat-card">
+      <h2>和小管家聊聊</h2>
+      <div id="chatMessages" class="chat-messages"></div>
+      <div class="chat-input-row">
+        <input id="chatInput" type="text" placeholder="想说什么就说什么..." onkeydown="if(event.key==='Enter') sendChat()" />
+        <button class="primary" onclick="sendChat()">发送</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <script src="app.js?v=4"></script>
+</body>
+</html>
