@@ -10,19 +10,22 @@ statusEl.textContent = useCloud ? '☁️ 云端同步已开启' : '💾 本地�
 statusEl.classList.add(useCloud ? 'cloud' : 'local');
 
 // ---------- 主题 ----------
-function toggleTheme() {
-  const kuromi = document.body.classList.toggle('kuromi');
-  localStorage.setItem('theme_kuromi', kuromi ? '1' : '');
-  document.getElementById('themeBtn').textContent = kuromi ? '💛 默认主题' : '🖤 酷洛米';
+const THEMES = ['', 'kuromi', 'mymelody'];
+const THEME_LABELS = { '': '💛 默认主题', kuromi: '🖤 酷洛米', mymelody: '🐇 美乐蒂' };
+
+function currentTheme() { return localStorage.getItem('theme') || ''; }
+function applyTheme(t) {
+  document.body.classList.remove('kuromi', 'mymelody');
+  if (t) document.body.classList.add(t);
+  document.getElementById('themeBtn').textContent = '🎨 ' + THEME_LABELS[t];
 }
-(function initTheme() {
-  const kuromi = localStorage.getItem('theme_kuromi') === '1';
-  if (kuromi) {
-    document.body.classList.add('kuromi');
-    const b = document.getElementById('themeBtn');
-    if (b) b.textContent = '💛 默认主题';
-  }
-})();
+function toggleTheme() {
+  const cur = currentTheme();
+  const next = THEMES[(THEMES.indexOf(cur) + 1) % THEMES.length];
+  localStorage.setItem('theme', next);
+  applyTheme(next);
+}
+(function initTheme() { applyTheme(currentTheme()); })();
 
 // ---------- 登录（GitHub OAuth） ----------
 let currentUser = null;
