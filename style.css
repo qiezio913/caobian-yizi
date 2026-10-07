@@ -141,8 +141,12 @@ body.mymelody .conv-item:hover { background: #ffe4ee; }
 body.mymelody .conv-item.active { background: #ff8fb3; color: #fff; }
 body.mymelody .conv-sidebar { border-right-color: #ffd5e3; }
 body.mymelody .theme-btn { background: #fff; color: #ff8fb3; border-color: #ffb6cd; }
+body.mymelody .theme-label { color: #ff8fb3; }
+.theme-bar { text-align: center; padding: 16px 0 32px; }
+.theme-label { font-size: 0.85rem; color: #b0a7b8; margin-right: 8px; }
 .theme-btn {
-  margin-top: 10px;
+  display: inline-block;
+  margin: 0 4px;
   border: 1px solid #f0b8c8;
   background: #fff;
   border-radius: 999px;
@@ -150,7 +154,11 @@ body.mymelody .theme-btn { background: #fff; color: #ff8fb3; border-color: #ffb6
   cursor: pointer;
   font-size: 0.85rem;
 }
+body.kuromi .theme-bar { background: transparent; }
 body.kuromi .theme-btn { background: #2a2038; color: #ff79c6; border-color: #ff79c6; }
+.theme-btn.active { background: #d96c8b; color: #fff; border-color: transparent; }
+body.kuromi .theme-btn.active { background: #ff79c6; color: #2a1030; }
+body.mymelody .theme-btn.active { background: #ff8fb3; color: #fff; }
 
 .chat-card { display: flex; flex-direction: column; }
 .chat-layout { display: flex; gap: 14px; flex: 1; }

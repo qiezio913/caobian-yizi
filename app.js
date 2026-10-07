@@ -10,20 +10,21 @@ statusEl.textContent = useCloud ? '☁️ 云端同步已开启' : '💾 本地�
 statusEl.classList.add(useCloud ? 'cloud' : 'local');
 
 // ---------- 主题 ----------
-const THEMES = ['', 'kuromi', 'mymelody'];
-const THEME_LABELS = { '': '💛 默认主题', kuromi: '🖤 酷洛米', mymelody: '🐇 美乐蒂' };
+const THEME_LABELS = { '': '默认', kuromi: '酷洛米', mymelody: '美乐蒂' };
 
 function currentTheme() { return localStorage.getItem('theme') || ''; }
 function applyTheme(t) {
   document.body.classList.remove('kuromi', 'mymelody');
   if (t) document.body.classList.add(t);
-  document.getElementById('themeBtn').textContent = '🎨 ' + THEME_LABELS[t];
+  document.querySelectorAll('.theme-btn').forEach(b => {
+    const target = b.getAttribute('onclick').match(/setTheme\('([^']*)'\)/);
+    const name = target ? target[1] : '';
+    b.classList.toggle('active', name === t);
+  });
 }
-function toggleTheme() {
-  const cur = currentTheme();
-  const next = THEMES[(THEMES.indexOf(cur) + 1) % THEMES.length];
-  localStorage.setItem('theme', next);
-  applyTheme(next);
+function setTheme(t) {
+  localStorage.setItem('theme', t);
+  applyTheme(t);
 }
 (function initTheme() { applyTheme(currentTheme()); })();
 
