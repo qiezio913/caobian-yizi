@@ -9,6 +9,21 @@ const statusEl = document.getElementById('syncStatus');
 statusEl.textContent = useCloud ? '☁️ 云端同步已开启' : '💾 本地存储模式（配置 config.js 后可开启云端同步）';
 statusEl.classList.add(useCloud ? 'cloud' : 'local');
 
+// ---------- 主题 ----------
+function toggleTheme() {
+  const kuromi = document.body.classList.toggle('kuromi');
+  localStorage.setItem('theme_kuromi', kuromi ? '1' : '');
+  document.getElementById('themeBtn').textContent = kuromi ? '💛 默认主题' : '🖤 酷洛米';
+}
+(function initTheme() {
+  const kuromi = localStorage.getItem('theme_kuromi') === '1';
+  if (kuromi) {
+    document.body.classList.add('kuromi');
+    const b = document.getElementById('themeBtn');
+    if (b) b.textContent = '💛 默认主题';
+  }
+})();
+
 // ---------- 登录（GitHub OAuth） ----------
 let currentUser = null;
 

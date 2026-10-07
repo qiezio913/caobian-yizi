@@ -97,6 +97,39 @@ button.primary:hover { background: #c95a7c; }
 }
 .list .empty { color: #bbb; text-align: center; padding: 16px; }
 
+body.kuromi {
+  background: linear-gradient(135deg, #1f1b24 0%, #3d2b52 100%);
+  color: #eee5f5;
+}
+body.kuromi header h1 { color: #ff79c6; }
+body.kuromi .badge { background: rgba(255,255,255,0.12); color: #ffd0ea; }
+body.kuromi .card { background: rgba(40, 32, 54, 0.85); color: #eee5f5; }
+body.kuromi .card h2 { color: #d8c7e8; }
+body.kuromi textarea, body.kuromi .chat-input-row input { background: #262030; color: #f0e6f8; border-color: #443255; }
+body.kuromi textarea::placeholder, body.kuromi .chat-input-row input::placeholder { color: #7a6a8a; }
+body.kuromi .tab { background: rgba(255,255,255,0.1); color: #cbb5dd; }
+body.kuromi .tab.active { background: #ff79c6; color: #2a1030; box-shadow: 0 4px 12px rgba(255,121,198,0.4); }
+body.kuromi button.primary { background: #ff79c6; color: #2a1030; }
+body.kuromi button.primary:hover { background: #ff5cb3; }
+body.kuromi .list .item { background: #262030; border-left-color: #ff79c6; }
+body.kuromi .list .item .meta { color: #9a86b0; }
+body.kuromi .msg.bot { background: #33264a; color: #e8dcf7; }
+body.kuromi .msg.user { background: #ff79c6; color: #2a1030; }
+body.kuromi .conv-item { background: #2a2038; color: #cbb5dd; }
+body.kuromi .conv-item:hover { background: #3a2b52; }
+body.kuromi .conv-item.active { background: #ff79c6; color: #2a1030; }
+body.kuromi .conv-sidebar { border-right-color: #3d2b52; }
+.theme-btn {
+  margin-top: 10px;
+  border: 1px solid #f0b8c8;
+  background: #fff;
+  border-radius: 999px;
+  padding: 6px 14px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+body.kuromi .theme-btn { background: #2a2038; color: #ff79c6; border-color: #ff79c6; }
+
 .chat-card { display: flex; flex-direction: column; }
 .chat-layout { display: flex; gap: 14px; flex: 1; }
 .conv-sidebar { width: 170px; flex-shrink: 0; border-right: 1px dashed #eee; padding-right: 12px; }
