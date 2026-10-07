@@ -111,6 +111,9 @@ button.primary:hover { background: #c95a7c; }
 .conv-item:hover { background: #f3eef4; }
 .conv-item.active { background: #d96c8b; color: #fff; }
 .sidebar-toggle { display: none; margin-bottom: 8px; border: none; background: #fff; border-radius: 8px; padding: 6px 12px; color: #8a7f90; cursor: pointer; }
+#authArea { margin-top: 8px; font-size: 0.85rem; color: #8a7f90; }
+.auth-btn { border: 1px solid #eee; background: #fff; border-radius: 999px; padding: 6px 14px; cursor: pointer; font-size: 0.85rem; color: #6a6070; margin-left: 6px; }
+.auth-login { background: #d96c8b; color: #fff; border-color: transparent; }
 .chat-main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
 
 @media (max-width: 640px) {

@@ -9,6 +9,37 @@ const statusEl = document.getElementById('syncStatus');
 statusEl.textContent = useCloud ? '☁️ 云端同步已开启' : '💾 本地存储模式（配置 config.js 后可开启云端同步）';
 statusEl.classList.add(useCloud ? 'cloud' : 'local');
 
+// ---------- 登录（GitHub OAuth） ----------
+let currentUser = null;
+
+async function refreshAuthUI() {
+  const authArea = document.getElementById('authArea');
+  if (!useCloud) { authArea.innerHTML = ''; return; }
+  const { data: { session } } = await supabaseClient.auth.getSession();
+  currentUser = session ? session.user : null;
+  if (currentUser) {
+    const name = currentUser.user_metadata?.user_name || currentUser.email || '已登录';
+    authArea.innerHTML = `<span class="auth-user">👤 ${name}</span> <button class="auth-btn" onclick="logout()">退出</button>`;
+  } else {
+    authArea.innerHTML = `<button class="auth-btn auth-login" onclick="loginWithGitHub()">🔑 用 GitHub 登录</button>`;
+  }
+}
+
+function loginWithGitHub() {
+  supabaseClient.auth.signInWithOAuth({ provider: 'github', options: { redirectTo: window.location.origin + window.location.pathname } });
+}
+
+async function logout() {
+  await supabaseClient.auth.signOut();
+  currentUser = null;
+  refreshAuthUI();
+}
+
+if (useCloud) {
+  supabaseClient.auth.onAuthStateChange(() => { currentUser = null; refreshAuthUI(); });
+  refreshAuthUI();
+}
+
 // 本地兜底
 function localGet(key) { try { return JSON.parse(localStorage.getItem(key)) || []; } catch { return []; } }
 function localSet(key, val) { localStorage.setItem(key, JSON.stringify(val)); }
@@ -26,6 +57,7 @@ async function fetchDiaries() {
 
 async function addDiary(entry) {
   if (useCloud) {
+    entry.user_id = currentUser ? currentUser.id : undefined;
     const { error } = await supabaseClient.from('diaries').insert([entry]);
     if (!error) return;
     console.warn('云端保存失败，改用本地', error);
@@ -51,6 +83,7 @@ async function fetchChats() {
 
 async function addChat(msg) {
   if (useCloud) {
+    msg.user_id = currentUser ? currentUser.id : undefined;
     const { error } = await supabaseClient.from('chats').insert([msg]);
     if (!error) return;
     console.warn('云端保存失败，改用本地', error);
@@ -71,6 +104,7 @@ function switchTab(tab) {
 document.getElementById('diaryDate').valueAsDate = new Date();
 
 async function saveDiary() {
+  if (useCloud && !currentUser) { alert('请先用 GitHub 登录哦 😊'); return; }
   const content = document.getElementById('diaryContent').value.trim();
   if (!content) return alert('写点什么再保存吧 💛');
   const entry = {
@@ -170,6 +204,7 @@ function appendMsg(role, content) {
 }
 
 async function sendChat() {
+  if (useCloud && !currentUser) { alert('请先用 GitHub 登录哦 😊'); return; }
   const input = document.getElementById('chatInput');
   const text = input.value.trim();
   if (!text) return;
