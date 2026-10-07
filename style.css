@@ -114,6 +114,8 @@ button.primary:hover { background: #c95a7c; }
 #authArea { margin-top: 8px; font-size: 0.85rem; color: #8a7f90; }
 .auth-btn { border: 1px solid #eee; background: #fff; border-radius: 999px; padding: 6px 14px; cursor: pointer; font-size: 0.85rem; color: #6a6070; margin-left: 6px; }
 .auth-login { background: #d96c8b; color: #fff; border-color: transparent; }
+.auth-form { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; margin-top: 6px; }
+.auth-form input { padding: 6px 10px; border: 1px solid #eee; border-radius: 999px; font-size: 0.85rem; outline: none; width: 150px; }
 .chat-main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
 
 @media (max-width: 640px) {

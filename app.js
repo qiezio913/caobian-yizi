@@ -21,12 +21,37 @@ async function refreshAuthUI() {
     const name = currentUser.user_metadata?.user_name || currentUser.email || '已登录';
     authArea.innerHTML = `<span class="auth-user">👤 ${name}</span> <button class="auth-btn" onclick="logout()">退出</button>`;
   } else {
-    authArea.innerHTML = `<button class="auth-btn auth-login" onclick="loginWithGitHub()">🔑 用 GitHub 登录</button>`;
+    authArea.innerHTML = `
+      <div class="auth-form">
+        <input id="authEmail" type="email" placeholder="📧 邮箱" />
+        <input id="authPwd" type="password" placeholder="🔒 密码" />
+        <button class="auth-btn auth-login" onclick="emailLogin()">登录</button>
+        <button class="auth-btn" onclick="emailSignup()">注册</button>
+        <button class="auth-btn" onclick="loginWithGitHub()">用 GitHub 登录</button>
+      </div>`;
   }
 }
 
 function loginWithGitHub() {
   supabaseClient.auth.signInWithOAuth({ provider: 'github', options: { redirectTo: window.location.origin + window.location.pathname } });
+}
+
+async function emailLogin() {
+  const email = document.getElementById('authEmail').value.trim();
+  const password = document.getElementById('authPwd').value;
+  if (!email || !password) return alert('请输入邮箱和密码');
+  const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
+  if (error) alert('登录失败：' + error.message);
+}
+
+async function emailSignup() {
+  const email = document.getElementById('authEmail').value.trim();
+  const password = document.getElementById('authPwd').value;
+  if (!email || !password) return alert('请输入邮箱和密码');
+  if (password.length < 6) return alert('密码至少 6 位');
+  const { error } = await supabaseClient.auth.signUp({ email, password, options: { emailRedirectTo: window.location.href } });
+  if (error) alert('注册失败：' + error.message);
+  else alert('注册成功！如果需要邮箱确认，请查收邮件并点链接；之后刷新页面再点登录。');
 }
 
 async function logout() {
