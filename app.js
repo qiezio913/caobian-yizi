@@ -15,11 +15,13 @@ function localSet(key, val) { localStorage.setItem(key, JSON.stringify(val)); }
 
 async function fetchDiaries() {
   if (useCloud) {
-    const { data, error } = await supabaseClient.from('diaries').select('*').order('date', { ascending: false });
+    const { data, error } = await supabaseClient.from('diaries').select('*').order('created_at', { ascending: false });
     if (!error) return data;
     console.warn('云端读取失败，改用本地', error);
   }
-  return localGet('diaries');
+  const list = localGet('diaries');
+  list.sort((a, b) => (a.created_at < b.created_at ? 1 : -1));
+  return list;
 }
 
 async function addDiary(entry) {
