@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>草编椅子 · 日记与倾诉</title>
-  <link rel="stylesheet" href="style.css?v=3" />
+  <link rel="stylesheet" href="style.css?v=4" />
 </head>
 <body>
   <header>
@@ -47,17 +47,26 @@
   <!-- 聊天页 -->
   <main id="pageChat" class="page hidden">
     <section class="card chat-card">
-      <h2>和小管家聊聊</h2>
-      <div id="chatMessages" class="chat-messages"></div>
-      <div class="chat-input-row">
-        <input id="chatInput" type="text" placeholder="想说什么就说什么..." onkeydown="if(event.key==='Enter') sendChat()" />
-        <button class="primary" onclick="sendChat()">发送</button>
+      <button id="sidebarToggle" class="sidebar-toggle" onclick="document.getElementById('convSidebar').classList.toggle('open')">☰ 对话列表</button>
+      <div class="chat-layout">
+        <aside id="convSidebar" class="conv-sidebar">
+          <button class="primary new-conv" onclick="startNewConversation()">＋ 新对话</button>
+          <div class="sidebar-title">老对话</div>
+          <div id="convList" class="conv-list"></div>
+        </aside>
+        <div class="chat-main">
+          <div id="chatMessages" class="chat-messages"></div>
+          <div class="chat-input-row">
+            <input id="chatInput" type="text" placeholder="想说什么就说什么..." onkeydown="if(event.key==='Enter') sendChat()" />
+            <button class="primary" onclick="sendChat()">发送</button>
+          </div>
+        </div>
       </div>
     </section>
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="config.js"></script>
-  <script src="app.js?v=4"></script>
+  <script src="app.js?v=6"></script>
 </body>
 </html>

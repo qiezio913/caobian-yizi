@@ -104,15 +104,58 @@ function escapeHtml(s) {
 }
 
 // ---------- 聊天 ----------
-async function loadChats() {
+// 每次打开聊天页都开启一条新对话；老对话可以从左侧列表点开
+let currentConversationId = null;
+
+function newConvId() {
+  return 'conv-' + Date.now() + '-' + Math.random().toString(36).slice(2, 8);
+}
+
+async function startNewConversation() {
+  currentConversationId = null;
+  const el = document.getElementById('chatMessages');
+  el.innerHTML = '';
+  appendMsg('bot', '你好哇，随便什么都可以和我说～');
+  document.querySelectorAll('.conv-item').forEach(b => b.classList.remove('active'));
+}
+
+async function loadConversationList() {
+  const list = await fetchChats();
+  const groups = {};
+  list.forEach(m => {
+    const key = m.conversation_id || 'old';
+    if (!groups[key]) groups[key] = { id: key, firstUserMeta: null, lastAt: '', count: 0 };
+    groups[key].count++;
+    if (m.role === 'user' && !groups[key].firstUserMeta) groups[key].firstUserMeta = m.content;
+    if (m.created_at > groups[key].lastAt) groups[key].lastAt = m.created_at;
+  });
+  const el = document.getElementById('convList');
+  el.innerHTML = '';
+  const keys = Object.keys(groups).sort((a, b) => groups[b].lastAt < groups[a].lastAt ? -1 : 1);
+  if (!keys.length) { el.innerHTML = '<div style="color:#ccc;font-size:0.8rem;text-align:center;padding:8px">还没有老对话</div>'; return; }
+  keys.forEach(k => {
+    const g = groups[k];
+    const btn = document.createElement('button');
+    btn.className = 'conv-item';
+    btn.textContent = (g.firstUserMeta || (k === 'old' ? '旧对话' : '对话')).slice(0, 12);
+    btn.onclick = () => openConversation(k);
+    btn.dataset.conv = k;
+    el.appendChild(btn);
+  });
+}
+
+async function openConversation(convId) {
+  currentConversationId = convId === 'old' ? null : convId;
   const list = await fetchChats();
   const el = document.getElementById('chatMessages');
   el.innerHTML = '';
-  if (!list.length) {
-    appendMsg('bot', '今天怎么样？有什么想说的都可以告诉我');
-    return;
-  }
-  list.forEach(m => appendMsg(m.role, m.content));
+  list.filter(m => (m.conversation_id || 'old') === convId).forEach(m => appendMsg(m.role, m.content));
+  document.querySelectorAll('.conv-item').forEach(b => b.classList.toggle('active', b.dataset.conv === convId));
+}
+
+async function loadChats() {
+  await startNewConversation();
+  await loadConversationList();
 }
 
 function appendMsg(role, content) {
@@ -129,8 +172,9 @@ async function sendChat() {
   const text = input.value.trim();
   if (!text) return;
   input.value = '';
+  if (!currentConversationId) currentConversationId = newConvId();
   appendMsg('user', text);
-  const t1 = { role: 'user', content: text, created_at: new Date().toISOString() };
+  const t1 = { role: 'user', content: text, created_at: new Date().toISOString(), conversation_id: currentConversationId };
   if (!useCloud) t1.id = 'local-' + Date.now();
   await addChat(t1);
 
@@ -138,9 +182,10 @@ async function sendChat() {
   setTimeout(async () => {
     const reply = comfortReply(text);
     appendMsg('bot', reply);
-    const t2 = { role: 'bot', content: reply, created_at: new Date().toISOString() };
+    const t2 = { role: 'bot', content: reply, created_at: new Date().toISOString(), conversation_id: currentConversationId };
     if (!useCloud) t2.id = 'local-' + Date.now();
     await addChat(t2);
+    loadConversationList();
   }, 600);
 }
 

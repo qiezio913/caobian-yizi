@@ -98,6 +98,26 @@ button.primary:hover { background: #c95a7c; }
 .list .empty { color: #bbb; text-align: center; padding: 16px; }
 
 .chat-card { display: flex; flex-direction: column; }
+.chat-layout { display: flex; gap: 14px; flex: 1; }
+.conv-sidebar { width: 170px; flex-shrink: 0; border-right: 1px dashed #eee; padding-right: 12px; }
+.conv-sidebar .new-conv { width: 100%; margin-top: 0; padding: 8px 0; font-size: 0.9rem; }
+.sidebar-title { font-size: 0.8rem; color: #b0a7b8; margin: 12px 0 6px; }
+.conv-list { display: flex; flex-direction: column; gap: 6px; max-height: 260px; overflow-y: auto; }
+.conv-item {
+  border: none; background: #faf7fb; text-align: left; cursor: pointer;
+  padding: 8px 10px; border-radius: 8px; font-size: 0.85rem; color: #6a6070;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.conv-item:hover { background: #f3eef4; }
+.conv-item.active { background: #d96c8b; color: #fff; }
+.sidebar-toggle { display: none; margin-bottom: 8px; border: none; background: #fff; border-radius: 8px; padding: 6px 12px; color: #8a7f90; cursor: pointer; }
+.chat-main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+
+@media (max-width: 640px) {
+  .conv-sidebar { display: none; position: absolute; background: #fff; z-index: 10; width: 190px; padding: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); border-radius: 12px; }
+  .conv-sidebar.open { display: block; }
+  .sidebar-toggle { display: inline-block; }
+}
 .chat-messages {
   height: 320px;
   overflow-y: auto;
